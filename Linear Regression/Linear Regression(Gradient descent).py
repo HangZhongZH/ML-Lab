@@ -65,3 +65,66 @@ for idx, item in enumerate(rate):
 
 plt.scatter(X, y0, c = 'b', marker= 'x')
 plt.show()
+
+
+
+
+
+
+
+
+
+
+#Using scikit-learn to get the solution
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(X, y0, test_size = 0.33)
+plt.figure()
+plt.scatter(x_train, y_train, c = 'b', label = 'train')
+plt.scatter(x_test, y_test, c = 'k', marker = '+', label = 'test')
+plt.legend()
+plt.show()
+
+from sklearn import linear_model
+regr = linear_model.LinearRegression()
+x_train, y_train, x_test, y_test = x_train.reshape(-1, 1), y_train.reshape(-1, 1),         x_test.reshape(-1, 1), y_test.reshape(-1, 1)
+regr.fit(x_train, y_train)
+slope = regr.coef_.reshape(-1)
+intercept = regr.intercept_.reshape(-1)
+y_predict = (slope * x_train + intercept).reshape(-1)
+y_predict2 = regr.predict(x_train).reshape(-1)
+print((y_predict == y_predict2).all())
+
+
+y_test_predict2 = regr.predict(x_test).reshape(-1)
+slope = regr.coef_.reshape(-1)
+intercept = regr.intercept_.reshape(-1)
+y_test_predict = slope * x_test + intercept
+y_test_predict = y_test_predict.reshape(-1)
+print((y_test_predict == y_test_predict2).all())
+
+plt.figure()
+plt.scatter(x_train, y_train, c = 'b', label = 'true')
+plt.scatter(x_train, y_predict, c = 'r', label = 'predict')
+plt.legend()
+plt.show()
+
+plt.figure()
+plt.scatter(x_test, y_test, c = 'k', label = 'true')
+plt.scatter(x_test, y_test_predict, c= 'b', label = 'predict')
+plt.legend()
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
