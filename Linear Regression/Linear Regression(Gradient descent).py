@@ -114,17 +114,3 @@ plt.scatter(x_test, y_test, c = 'k', label = 'true')
 plt.scatter(x_test, y_test_predict, c= 'b', label = 'predict')
 plt.legend()
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
