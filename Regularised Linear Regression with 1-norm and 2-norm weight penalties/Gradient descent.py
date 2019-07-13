@@ -59,6 +59,7 @@ for idx, item in enumerate(rates):
     _, loss_history = gradientdescent(Amat, y_true, w_init, item, 20)
     ax[1].plot(loss_history, label = item)
 ax[1].legend()
+plt.show()
 
 
 #Use LSE(pseudo inverse)
@@ -107,3 +108,4 @@ ax[2].plot(x_test, y_predict_LSE, label = 'LSE')
 for idx, item in enumerate(wlist):
     ax[2].plot(x_test, Amat.dot(item), label = tnlist[idx])
 ax[2].legend()
+plt.show()
