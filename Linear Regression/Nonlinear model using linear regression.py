@@ -65,3 +65,4 @@ for i in range(5):
     ax[i].plot(x, y_predict_all)
     title = 'fit with degree' + str(i + 1)
     ax[i].set_title(title)
+plt.show()
