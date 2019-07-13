@@ -33,5 +33,35 @@ def designmatpoly(x):
     Amat = np.concatenate((first_col, second_col, third_col), axis = 1)
     return Amat
 
-A_trainb= designmatpoly(x_train)
+A_train= designmatpoly(x_train)
 A_test = designmatpoly(x_test)
+
+
+#Above function can be written as built-in funciton in Library sklearn
+from sklearn.preprocessing import PolynomialFeatures
+
+poly2feat = PolynomialFeatures(degree = 2, include_bias = True)
+A_train_sklearn = poly2feat.fit_transform(x_train)
+A_test_sklearn = poly2feat.fit_transform(x_test)
+
+
+
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+fig, ax = plt.subplots(nrows = 1, ncols = 5)
+for i in range(5):
+    features = PolynomialFeatures(degree = i + 1, include_bias = True)
+    x_feature = features.fit_transform(x)
+    x_feature_train = features.fit_transform(x_train)
+    x_feature_test = features.fit_transform(x_test)
+    regr = LinearRegression()
+    regr.fit(x_feature_train, y_train)
+    y_predict_test = regr.predict(x_feature_test)
+    y_predict_all = regr.predict(x_feature)
+    
+    ax[i].scatter(x_train, y_train)
+    ax[i].scatter(x_test, y_test)
+    ax[i].plot(x, y_predict_all)
+    title = 'fit with degree' + str(i + 1)
+    ax[i].set_title(title)
