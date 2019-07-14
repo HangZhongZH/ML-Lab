@@ -20,6 +20,8 @@ def SGDescent(Amat, y_true, w_init, tn, td, epochs):
     w = w_init
     w_history = []
     loss_history = []
+    w_all = []
+    w_all.append(w)
     for i in range(epochs):
         loss = np.square(y_true - Amat.dot(w)).mean()
         w_history.append(w)
@@ -31,7 +33,8 @@ def SGDescent(Amat, y_true, w_init, tn, td, epochs):
             grad = -(2/n) * xi.T.dot(yi - xi.dot(w))
             rate = tn / (td + (n * i + j))
             w = w - rate * grad
-    return w_history, loss_history
+            w_all.append(w)
+    return w_history, loss_history, w_all
 
 
 def f(x):
@@ -82,7 +85,7 @@ td = 15
 wlist = []
 fig, ax = plt.subplots(1, 3)
 for i in tnlist:
-    w_history, loss_history = SGDescent(Amat, y0, w0, i, td, epochs)
+    w_history, loss_history, w_all = SGDescent(Amat, y0, w0, i, td, epochs)
     wlist.append(w_history[-1])
     ax[0].plot(loss_history, label = i)
 ax[0].legend()
@@ -111,24 +114,3 @@ ax[2].legend()
 plt.show()
 
 
-
-
-#Visualising gradient descent in weight space
-w0 = (-2.5, 2.5) + np.random.randn(2)
-w0 = w0.reshape(-1, 1)
-w_history, loss_history = SGDescent(Amat, y_true_test, w0, 2, 100, 150)
-wmin, wmax = np.min(w_history), np.max(w_history)
-wmin, wmax = wmin.reshape(-1, 1), wmax.reshape(-1, 1)
-
-from mpl_toolkits.mplot3d import Axes3D
-fig = plt.figure()
-ax0 = fig.add_subplot(121, projection = '3d')
-wlist = np.array(wlist).reshape(-1, 2)
-x = wlist[:,0]
-y = wlist[:, 1]
-z = loss_history
-zeros = np.zeros(len(z))
-ax0.scatter(x, y, zeros, label = 'weights')
-ax0.scatter(x, y, z, label = 'loss decreasing')
-ax0.legend()
-plt.show()
