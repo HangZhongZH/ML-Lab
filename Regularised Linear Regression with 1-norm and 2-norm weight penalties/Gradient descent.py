@@ -71,8 +71,8 @@ x = x.reshape(-1, 1)
 y0 = f(x) + 0.03 * np.random.normal(0, 1, x.shape)
 firstCol = np.square(x)
 secondCol = x
-thirdCol = np.ones(x.shape)
-Amat = np. concatenate((firstCol, secondCol, thirdCol), axis = 1)
+#thirdCol = np.ones(x.shape)
+Amat = np. concatenate((firstCol, secondCol), axis = 1)
 wBest = np.linalg.pinv(Amat.T.dot(Amat)).dot(Amat.T).dot(y0)
 
 w0 = np.random.random([Amat.shape[1], 1])
@@ -100,12 +100,35 @@ x_test = x_test.reshape(-1, 1)
 y_true_test = f(x_test) + 0.05 * np.random.normal(0, 1, x_test.shape)
 firstCol = np.square(x_test)
 secondCol = x_test
-thirdCol = np.ones(x_test.shape)
-Amat = np.concatenate((firstCol, secondCol, thirdCol), axis = 1)
+#thirdCol = np.ones(x_test.shape)
+Amat = np.concatenate((firstCol, secondCol), axis = 1)
 y_predict_LSE = Amat.dot(wBest)
 ax[2].scatter(x_test, y_true_test, label = 'True data')
 ax[2].plot(x_test, y_predict_LSE, label = 'LSE')
 for idx, item in enumerate(wlist):
     ax[2].plot(x_test, Amat.dot(item), label = tnlist[idx])
 ax[2].legend()
+plt.show()
+
+
+
+
+#Visualising gradient descent in weight space
+w0 = (-2.5, 2.5) + np.random.randn(2)
+w0 = w0.reshape(-1, 1)
+w_history, loss_history = SGDescent(Amat, y_true_test, w0, 2, 100, 150)
+wmin, wmax = np.min(w_history), np.max(w_history)
+wmin, wmax = wmin.reshape(-1, 1), wmax.reshape(-1, 1)
+
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure()
+ax0 = fig.add_subplot(121, projection = '3d')
+wlist = np.array(wlist).reshape(-1, 2)
+x = wlist[:,0]
+y = wlist[:, 1]
+z = loss_history
+zeros = np.zeros(len(z))
+ax0.scatter(x, y, zeros, label = 'weights')
+ax0.scatter(x, y, z, label = 'loss decreasing')
+ax0.legend()
 plt.show()
